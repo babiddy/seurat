@@ -3082,12 +3082,13 @@ SingleFeaturePlot <- function(data.use, feature, data.plot, pt.size, pch.use, co
 #' @param pch.use Pch for plotting
 #' @param reduction.use Which dimensionality reduction to use. Default is
 #' "tsne", can also be "pca", or "ica", assuming these are precomputed.
+#' @param plot.title Plots are labeled with the given title. Default is NULL
 #' @return No return value, only a graphical output
 #' @export
-setGeneric("FeatureHeatmap", function(object,features.plot,dim.1=1,dim.2=2,idents.use=NULL,pt.size=2,cols.use=rev(heat.colors(10)),pch.use=16,reduction.use="tsne") standardGeneric("FeatureHeatmap"))
+setGeneric("FeatureHeatmap", function(object,features.plot,dim.1=1,dim.2=2,idents.use=NULL,pt.size=2,cols.use=rev(heat.colors(10)),pch.use=16,reduction.use="tsne", plot.title = NULL) standardGeneric("FeatureHeatmap"))
 #' @export
 setMethod("FeatureHeatmap", "seurat",
-          function(object,features.plot,dim.1=1,dim.2=2,idents.use=NULL,pt.size=2,cols.use=rev(heat.colors(10)),pch.use=16,reduction.use="tsne") {
+          function(object,features.plot,dim.1=1,dim.2=2,idents.use=NULL,pt.size=2,cols.use=rev(heat.colors(10)),pch.use=16,reduction.use="tsne", plot.title = NULL) {
             idents.use=set.ifnull(idents.use,sort(unique(object@ident)))
             dim.code="PC"
             par(mfrow=c(length(features.plot),length(idents.use)))
@@ -3109,7 +3110,7 @@ setMethod("FeatureHeatmap", "seurat",
             p <- ggplot(data.reshape, aes(x,y)) + geom_point(aes(colour=value,size=pt.size)) + scale_colour_manual(values=cols.use)
 
             p=p + facet_grid(variable~ident) + scale_size(range = c(pt.size, pt.size))
-            p2=p+gg.xax()+gg.yax()+gg.legend.pts(6)+gg.legend.text(12)+no.legend.title+theme_bw()+nogrid+theme(legend.title=element_blank())
+            p2=p+gg.xax()+gg.yax()+gg.legend.pts(6)+gg.legend.text(12)+no.legend.title+theme_bw()+nogrid+theme(legend.title=element_blank()) + ggtitle(plot.title)
             print(p2)
           }
 )
