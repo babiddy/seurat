@@ -6,7 +6,7 @@
 \usage{
 FeatureHeatmap(object, features.plot, dim.1 = 1, dim.2 = 2,
   idents.use = NULL, pt.size = 2, cols.use = rev(heat.colors(10)),
-  pch.use = 16, reduction.use = "tsne", plot.title = NULL)
+  pch.use = 16, reduction.use = "tsne")
 }
 \arguments{
 \item{object}{Seurat object}
@@ -29,8 +29,6 @@ heat.colors(10).}
 
 \item{reduction.use}{Which dimensionality reduction to use. Default is
 "tsne", can also be "pca", or "ica", assuming these are precomputed.}
-
-\item{plot.title}{Plots are labeled with the given title. Default is NULL}
 }
 \value{
 No return value, only a graphical output
