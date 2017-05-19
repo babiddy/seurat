@@ -3083,14 +3083,16 @@ SingleFeaturePlot <- function(data.use, feature, data.plot, pt.size, pch.use, co
 #' @param reduction.use Which dimensionality reduction to use. Default is
 #' "tsne", can also be "pca", or "ica", assuming these are precomputed.
 #' @param plot.title Plots are labeled with the given title. Default is NULL
+#' @param drop.idents Plotting parameter, Default is TRUE which drops identities with no data from plot. Setting to FALSE will plot all levels of identity being used. 
 #' @return No return value, only a graphical output
 #' @export
-setGeneric("FeatureHeatmap", function(object,features.plot,dim.1=1,dim.2=2,idents.use=NULL,pt.size=2,cols.use=rev(heat.colors(10)),pch.use=16,reduction.use="tsne", plot.title = NULL) standardGeneric("FeatureHeatmap"))
+setGeneric("FeatureHeatmap", function(object,features.plot,dim.1=1,dim.2=2,idents.use=NULL,pt.size=2,cols.use=rev(heat.colors(10)),pch.use=16,reduction.use="tsne", plot.title = NULL, drop.idents = TRUE) standardGeneric("FeatureHeatmap"))
 #' @export
 setMethod("FeatureHeatmap", "seurat",
-          function(object,features.plot,dim.1=1,dim.2=2,idents.use=NULL,pt.size=2,cols.use=rev(heat.colors(10)),pch.use=16,reduction.use="tsne", plot.title = NULL) {
-            idents.use=set.ifnull(idents.use,sort(unique(object@ident)))
-            dim.code="PC"
+          function(object,features.plot,dim.1=1,dim.2=2,idents.use=NULL,pt.size=2,cols.use=rev(heat.colors(10)),pch.use=16,reduction.use="tsne", plot.title = NULL, drop.idents = TRUE) {
+            #idents.use=set.ifnull(idents.use,sort(unique(object@ident)))
+            idents.use = set.ifnull(idents.use, levels(object@ident))
+	    dim.code="PC"
             par(mfrow=c(length(features.plot),length(idents.use)))
             dim.code=translate.dim.code(reduction.use); dim.codes=paste(dim.code,c(dim.1,dim.2),sep="")
             data.plot=data.frame(FetchData(object,dim.codes))
@@ -3109,7 +3111,7 @@ setMethod("FeatureHeatmap", "seurat",
             #p <- ggplot(data.reshape, aes(x,y)) + geom_point(aes(colour=reorder(value,1:length(cols.use)),size=pt.size)) + scale_colour_manual(values=cols.use)
             p <- ggplot(data.reshape, aes(x,y)) + geom_point(aes(colour=value,size=pt.size)) + scale_colour_manual(values=cols.use)
 
-            p=p + facet_grid(variable~ident) + scale_size(range = c(pt.size, pt.size))
+            p=p + facet_grid(variable~ident, drop = drop.idents) + scale_size(range = c(pt.size, pt.size))
             p2=p+gg.xax()+gg.yax()+gg.legend.pts(6)+gg.legend.text(12)+no.legend.title+theme_bw()+nogrid+theme(legend.title=element_blank()) + ggtitle(plot.title)
             print(p2)
           }
