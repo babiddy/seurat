@@ -6,7 +6,8 @@
 \usage{
 FeatureHeatmap(object, features.plot, dim.1 = 1, dim.2 = 2,
   idents.use = NULL, pt.size = 2, cols.use = rev(heat.colors(10)),
-  pch.use = 16, reduction.use = "tsne", plot.title = NULL)
+  pch.use = 16, reduction.use = "tsne", plot.title = NULL,
+  drop.idents = TRUE)
 }
 \arguments{
 \item{object}{Seurat object}
@@ -31,6 +32,8 @@ heat.colors(10).}
 "tsne", can also be "pca", or "ica", assuming these are precomputed.}
 
 \item{plot.title}{Plots are labeled with the given title. Default is NULL}
+
+\item{drop.idents}{Plotting parameter, Default is TRUE which drops identities with no data from plot. Setting to FALSE will plot all levels of identity being used.}
 }
 \value{
 No return value, only a graphical output
